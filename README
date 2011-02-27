@@ -1,0 +1,142 @@
+Automatic command line argument parser
+======================================
+
+These header files allow a simplified way of parsing command line arguments to
+actual variables. All command line argument values will be available with the
+macro invocation ARGUMENT_VALUE(name), where name is the name of the command
+line argument, and whether they were passed on the command line is available
+by invoking ARGUMENT_IS_PRESENT(name).
+
+The command line arguments must be defined in the separate file
+arguments.def. This file contains invocations of the macro _A and,
+optionally, functions and includes to initialise argument variables.
+
+
+1. File structure of arguments.def
+==================================
+
+The typical structure of arguments.def will be as follows:
+
+#ifndef ARGUMENT_HELPERS
+#define ARGUMENT_HELPERS
+
+/* Initialisation functions and includes */
+
+#endif
+
+_A(...)
+
+/* ... */
+
+_A(...)
+
+/* End of file */
+
+The order of the arguments found in arguments.def needs to reflect the
+parameters to the main function if ARGUMENTS_AUTOMATIC is defined.
+
+
+2. The _A macro
+===============
+
+The argument defining macro takes the following parameters:
+
+type
+    The type of the variable that stores the parsed value of this argument.
+    This may be an unnamed struct.
+
+name
+    The name of the variable, and also the long argument name. The long
+    argument name is constructed by prepending two dashes to the name and then
+    replacing all underscores with dashes.
+
+    The type name_t will be typedefed to type. If type is an unnamed struct,
+    use name_t in the parameter declaraction to your main function.
+
+short
+    The short command line argument name. This may be NULL or
+    ARGUMENTS_NO_SHORT_OPTION.
+
+value_count
+    The number of parameters following the named parameter that are required.
+
+is_required
+    Whether this argument is required on the command line. The value for
+    is_required is evaluated once all arguments have been read, so it may
+    depend on arguments passed on the command line.
+
+help
+    The help text for the argument. The first occurrence of "%s" in this
+    message will be replaced by the default value.
+
+set_default
+    A list of statements executed when the argument has not been passed on the
+    command line. The following variables are available to the code:
+      - type *target: a pointer to the variable to receive the value.
+    If there is not suitable default value for the argument, pass
+    ARGUMENTS_NO_DEFAULT. In this case, the parameter value will be all
+    zeroes.
+
+read
+    A list of statements used to actually set the value of the variable. The
+    following variables are available to the code:
+      - type *target: a pointer to the variable to receive the value.
+      - const char *value: the actual value passed.
+      - int is_valid: whether the value passed was valid; set this to 0 if the
+        argument variable could not be initialised. You do not need to modify
+        it if the value is valid.
+
+release
+    A list of statements used to release any resources used by the variable;
+    this may be closing files, or freeing allocated memory. The following
+    variables are available to the code:
+      - type *target: a pointer to the variable that received the value.
+
+3. Defines recognised
+=====================
+
+The following is a list of defines that are recognised by arguments.h. They
+should be defined before arguments.h is included. Their default values are
+included.
+
+ARGUMENTS_AUTOMATIC=1
+    Whether to enter automatic mode. If this is non-zero, all parameter
+    parsing and validation will be handled for you, and the entry point for
+    your program will be the function static int main(int argc, char *argv[],
+    name1_t name1, name2_t name2, ..., nameN_t nameN).
+
+ARGUMENTS_PRINT_HELP=1
+    Whether to automatically print a help message if the command line
+    arguments --help or -h are encountered. The help message will start with
+    the value of ARGUMENTS_HELP followed by a new line, if it is defined, and
+    the all argument names and their help strings.
+
+ARGUMENTS_PARAMETER_INVALID=110
+    The return code to return from the main function if ARGUMENTS_AUTOMATIC is
+    defined and an invalid command line argument value is encountered or an
+    argument requiring several values is not passed enough values.
+
+ARGUMENTS_PARAMETER_MISSING=120
+    The return code to return from the main function if ARGUMENTS_AUTOMATIC is
+    defined and a required command line argument is not passed.
+
+ARGUMENTS_NO_SETUP
+    Define this if your application needs no setup before all command line
+    arguments can be parsed. This kind of setup could be initialising an
+    external library, for example OpenSSL to allow a parameter of the type
+    X509* to your main function.
+
+    If you do not define this, you have to specify the function
+    static int setup(int argc, char *argv[]). If its return value is not 0,
+    the program will exit with that return code.
+
+ARGUMENTS_NO_TEARDOWN
+    Define this if your application needs no teardown after setup has been
+    called. If setup exited successfully, this function will always be called
+    as static void teardown(void) using the atexit function.
+
+4. Manual mode
+==============
+
+It is possible to use these headers in manual mode as well. For an example of
+how to do that, see int main(int argc, char *argv[]) at the end of arguments.h.
