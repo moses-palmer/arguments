@@ -97,9 +97,26 @@
 #include "arguments.def"
 
 /**
+ * Whether to use this file in automatic mode.
+ */
+#ifndef ARGUMENTS_AUTOMATIC
+    #define ARGUMENTS_AUTOMATIC 1
+#endif
+
+/**
+ * Whether to always print help if the --help argument is passed.
+ *
+ * If ARGUMENTS_HELP is also non-zero, it is used as a string parameter to
+ * printf.
+ */
+#ifndef ARGUMENTS_PRINT_HELP
+    #define ARGUMENTS_PRINT_HELP 1
+#endif
+
+/**
  * The return code when an invalid command line parameter is encountered.
  */
- #ifndef ARGUMENTS_PARAMETER_INVALID
+#ifndef ARGUMENTS_PARAMETER_INVALID
     #define ARGUMENTS_PARAMETER_INVALID 110
 #endif
 
@@ -110,32 +127,8 @@
     #define ARGUMENTS_PARAMETER_MISSING 120
 #endif
 
-/**
- * Whether to use this file in automatic mode.
- */
-#ifndef ARGUMENTS_AUTOMATIC
-    #define ARGUMENTS_AUTOMATIC
-#endif
 
-/**
- * Whether to always print help if the --help argument is passed.
- *
- * If ARGUMENTS_HELP is also defined, it is used as a string parameter to
- * printf.
- */
-#ifndef ARGUMENTS_PRINT_HELP
-    #define ARGUMENTS_PRINT_HELP
-#endif
-
-/**
- * Whether to print an error message when a missing argument is encountered.
- */
-#ifndef ARGUMENTS_PRINT_MISSING
-    #define ARGUMENTS_PRINT_MISSING
-#endif
-
-
-#ifdef ARGUMENTS_AUTOMATIC
+#if ARGUMENTS_AUTOMATIC
 
 /**
  * This function is called before the presence of all required arguments has
@@ -159,7 +152,7 @@ setup(int argc, char *argv[])
 
 /**
  * This is the function called by main.c once the arguments have been parsed if
- * ARGUMENTS_AUTOMATIC is defined.
+ * ARGUMENTS_AUTOMATIC is non-zero.
  *
  * Its function signature matches that of main with all arguments found in
  * arguments.def added to the argument list as well.
@@ -209,7 +202,7 @@ enum {
      * The command line argument --help was found, and the help message was
      * printed.
      *
-     * Unless ARGUMENTS_PRINT_HELP is defined, this value will not be returned.
+     * Unless ARGUMENTS_PRINT_HELP is non-zero, this value will not be returned.
      */
     AC_HELP
 };
@@ -276,7 +269,7 @@ static struct {
 /**
  * Initialises the arguments struct by zeroing it.
  *
- * Unless ARGUMENTS_AUTOMATIC is defined, this should be called before calling
+ * Unless ARGUMENTS_AUTOMATIC is non-zero, this should be called before calling
  * arguments_parse.
  */
 static void
@@ -286,7 +279,7 @@ arguments_initialize(void)
 }
 
 
-#if defined(ARGUMENTS_PRINT_HELP) || defined(ARGUMENTS_AUTOMATIC)
+#if ARGUMENTS_PRINT_HELP || ARGUMENTS_AUTOMATIC
     #include "arguments-help.h"
 #endif
 
@@ -323,12 +316,12 @@ arguments_release(void)
  * arguments from argv[*nextarg] until either the end of argv is reached or an
  * invalid argument value is encountered.
  *
- * If ARGUMENTS_PRINT_HELP is defined, this function will print a help message
+ * If ARGUMENTS_PRINT_HELP is non-zero, this function will print a help message
  * if the arguments --help or -h are encountered. If ARGUMENTS_AUTOMATIC is also
- * defined, this function will not return; rather, it will terminate the process
- * with the return code 0.
+ * non-zero, this function will not return; rather, it will terminate the
+ * process with the return code 0.
  *
- * If ARGUMENTS_AUTOMATIC is defined, this function will automatically
+ * If ARGUMENTS_AUTOMATIC is non-zero, this function will automatically
  * initialise the argument struct and then parse all arguments. If an invalid
  * argument value is encountered, it will not return; rather, it will terminate
  * the process with the return code 1.
@@ -344,7 +337,7 @@ arguments_release(void)
  *     If nextarg == argc, all arguments were parsed. If an error occurred
  *     while parsing an argument, nextarg will contain its index.
  * @return AC_OK if no error occurred, AC_HELP if --help was encountered and
- *     ARGUMENTS_PRINT_HELP was defined, or AC_INVALID if an invalid value was
+ *     ARGUMENTS_PRINT_HELP was non-zero, or AC_INVALID if an invalid value was
  *     passed
  */
 static int
@@ -359,15 +352,15 @@ arguments_read(int argc, char *argv[], int *nextarg)
     /* Parse the command line */
     while (*nextarg < argc && is_valid) {
         /* If ARGUMENTS_PRINT_HELP is defined, we handle --help and -h */
-#ifdef ARGUMENTS_PRINT_HELP
+#if ARGUMENTS_PRINT_HELP
         if ((strcmp(argv[*nextarg], "--help") == 0)
                 || (strcmp(argv[*nextarg], "-h") == 0)) {
             arguments_print_help();
             return AC_HELP;
         }
 #else
-        /* If ARGUMENTS_PRINT_HELP is not defined, we need a dummy if statement
-           to allow the following list of else ifs */
+        /* If ARGUMENTS_PRINT_HELP is zero, we need a dummy if statement to
+           allow the following list of else ifs */
         if (0);
 #endif
 
@@ -451,10 +444,10 @@ arguments_set(void)
 
 
 /*
- * If ARGUMENTS_AUTOMATIC is defined, we implement main() and call start()
+ * If ARGUMENTS_AUTOMATIC is non-zero, we implement main() and call start()
  * instead.
  */
-#ifdef ARGUMENTS_AUTOMATIC
+#if ARGUMENTS_AUTOMATIC
 
 int
 main(int argc, char *argv[])
@@ -480,7 +473,7 @@ main(int argc, char *argv[])
     }
 
     /* Detect missing arguments */
-#ifdef ARGUMENTS_PRINT_MISSING
+#ifdef ARGUMENTS_PRINT_MISSING_FORMAT
     #define print_missing(name) \
         fprintf(stderr, "Argument %s is required, but not specified.\n", name)
 #else
