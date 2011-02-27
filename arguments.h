@@ -475,7 +475,7 @@ main(int argc, char *argv[])
     /* Detect missing arguments */
 #ifdef ARGUMENTS_PRINT_MISSING_FORMAT
     #define print_missing(name) \
-        fprintf(stderr, "Argument %s is required, but not specified.\n", name)
+        fprintf(stderr, ARGUMENTS_PRINT_MISSING_FORMAT, name)
 #else
     #define print_missing(name)
 #endif
