@@ -390,7 +390,7 @@ arguments_read(int argc, char *argv[], int *nextarg)
         }
     }
 
-    /* is_valid it non-zero unless a command line parameter is missing */
+    /* is_valid is non-zero unless a command line parameter is missing */
     return is_valid ? AC_OK : AC_ERROR;
 }
 
