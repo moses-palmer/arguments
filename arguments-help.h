@@ -43,7 +43,7 @@ argument_header_width(void)
     if (current > result) { \
         result = current; \
     }
-#include "arguments.def"
+#include "../arguments.def"
 
     return result;
 }
@@ -247,5 +247,5 @@ arguments_print_help(void)
         snprintf(header, sizeof(header), "--%s", #name); \
     } \
     arguments_print_help_string(header, help, header_width, terminal_width);
-#include "arguments.def"
+#include "../arguments.def"
 }

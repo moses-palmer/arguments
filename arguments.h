@@ -94,7 +94,7 @@
 #define _A(type, name, short, value_count, is_required, help, \
         set_default, read, release) \
     typedef type name##_t;
-#include "arguments.def"
+#include "../arguments.def"
 
 /**
  * Whether to use this file in automatic mode.
@@ -163,7 +163,7 @@ setup(int argc, char *argv[])
     , name##_t name
 static int
 run(int argc, char *argv[]
-    #include "arguments.def"
+    #include "../arguments.def"
     );
 
 /**
@@ -262,7 +262,7 @@ static struct {
         unsigned int value_strings_length; \
         name##_t value; \
     } name;
-#include "arguments.def"
+#include "../arguments.def"
 } arguments;
 
 
@@ -305,7 +305,7 @@ arguments_release(void)
         \
         if (target); \
     }
-#include "arguments.def"
+#include "../arguments.def"
 }
 
 
@@ -382,7 +382,7 @@ arguments_read(int argc, char *argv[], int *nextarg)
                 break; \
             } \
         }
-    #include "arguments.def"
+    #include "../arguments.def"
 
         else {
             /* If no argument matched the current one, break */
@@ -434,7 +434,7 @@ arguments_set(void)
         if (value_strings); \
         if (value_strings_length); \
     }
-#include "arguments.def"
+#include "../arguments.def"
 
     /* This function has to be called */
     atexit(arguments_release);
@@ -516,7 +516,7 @@ main(int argc, char *argv[])
         #define _A(type, name, short, value_count, is_required, help, \
                 set_default, read, release) \
             , arguments.name.value
-        #include "arguments.def"
+        #include "../arguments.def"
     );
 }
 
