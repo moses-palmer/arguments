@@ -145,7 +145,9 @@
 static int
 setup(int argc, char *argv[])
 #ifdef ARGUMENTS_NO_SETUP
-{}
+{
+    return 0;
+}
 #else
 ;
 #endif
