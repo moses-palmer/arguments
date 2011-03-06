@@ -143,7 +143,7 @@
  * If you do not need any setup, define ARGUMENTS_NO_SETUP.
  */
 static int
-setup(int argc, char *argv[])
+arguments_setup(int argc, char *argv[])
 #ifdef ARGUMENTS_NO_SETUP
 {
     return 0;
@@ -175,7 +175,7 @@ run(int argc, char *argv[]
  * If you do not need any teardown, define ARGUMENTS_NO_TEARDOWN.
  */
 static void
-teardown(void)
+arguments_teardown(void)
 #ifdef ARGUMENTS_NO_TEARDOWN
 {}
 #else
@@ -489,17 +489,17 @@ main(int argc, char *argv[])
         print_missing(#name); \
         return ARGUMENTS_PARAMETER_MISSING; \
     }
-#include "arguments.def"
+#include "../arguments.def"
 
     /* Call setup before converting the parameter values to variables */
-    result = setup(argc, argv);
+    result = arguments_setup(argc, argv);
     if (result != 0) {
         return result;
     }
 
     /* Once we have successfully called setup, we must make sure that teardown
        is also called */
-    atexit(teardown);
+    atexit(arguments_teardown);
 
     /* Actually converts the string values read to variables */
     switch (arguments_set()) {
