@@ -368,7 +368,7 @@ arguments_read(int argc, char *argv[], int *nextarg)
     #define _A(type, name, short, value_count, is_required, help, \
             set_default, read, release) \
         else if ((arguments_cmp(argv[*nextarg], #name) == 0) \
-                || (short && strcmp(argv[*nextarg], short) == 0)) { \
+                || (strcmp(argv[*nextarg], short ? short : "") == 0)) { \
             arguments.name.present = 1; \
             arguments.name.value_strings_length = value_count; \
             \

@@ -38,7 +38,7 @@ argument_header_width(void)
         set_default, read, release) \
     current = 2 + strlen(#name); \
     if (short) { \
-        current += 2 + strlen(short); \
+        current += 2 + strlen(short ? short : ""); \
     } \
     if (current > result) { \
         result = current; \
@@ -241,7 +241,8 @@ arguments_print_help(void)
 #define _A(type, name, short, value_count, is_required, help, \
         set_default, read, release) \
     if (short) { \
-        snprintf(header, sizeof(header), "--%s, %s", #name, short); \
+        snprintf(header, sizeof(header), "--%s, %s", #name, \
+            short ? short : ""); \
     } \
     else { \
         snprintf(header, sizeof(header), "--%s", #name); \
