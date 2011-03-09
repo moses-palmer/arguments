@@ -206,7 +206,7 @@ arguments_print_help_string(const char *header, const char *help,
         /* If we have not reached the end of the help string, print a new empty
            header column */
         if (*c) {
-            int i;
+            unsigned int i;
 
             for (i = 0; i <= header_width; i++) {
                 putc(' ', stdout);
