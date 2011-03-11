@@ -100,16 +100,20 @@ should be defined before arguments.h is included. Their default values are
 included.
 
 ARGUMENTS_AUTOMATIC=1
-    Whether to enter automatic mode. If this is non-zero, all parameter
-    parsing and validation will be handled for you, and the entry point for
-    your program will be the function static int main(int argc, char *argv[],
-    name1_t name1, name2_t name2, ..., nameN_t nameN).
+    Whether to enter automatic mode.
+
+    If this is non-zero, all parameter parsing and validation will be handled
+    for you, and the entry point for your program will be the function
+    static int main(int argc, char *argv[], name1_t name1, name2_t name2, ...,
+    nameN_t nameN).
 
 ARGUMENTS_PRINT_HELP=1
     Whether to automatically print a help message if the command line
-    arguments --help or -h are encountered. The help message will start with
-    the value of ARGUMENTS_HELP followed by a new line, if it is defined, and
-    the all argument names and their help strings.
+    arguments --help or -h are encountered.
+
+    The help message will start with the value of ARGUMENTS_HELP followed by a
+    new line, if it is defined, and the all argument names and their help
+    strings.
 
 ARGUMENTS_PARAMETER_INVALID=110
     The return code to return from the main function if ARGUMENTS_AUTOMATIC is
@@ -127,13 +131,13 @@ ARGUMENTS_NO_SETUP
     X509* to your main function.
 
     If you do not define this, you have to specify the function
-    static int setup(int argc, char *argv[]). If its return value is not 0,
-    the program will exit with that return code.
+    static int arguments_setup(int argc, char *argv[]). If its return value is
+    not 0, the program will exit with that return code.
 
 ARGUMENTS_NO_TEARDOWN
     Define this if your application needs no teardown after setup has been
-    called. If setup exited successfully, this function will always be called
-    as static void teardown(void) using the atexit function.
+    called. If arguments_setup exited successfully, this function will always be
+    called as static void arguments_teardown(void) using the atexit function.
 
 4. Manual mode
 ==============
