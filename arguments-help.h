@@ -10,7 +10,8 @@
 static unsigned int
 arguments_terminal_width(void)
 {
-    int result = atoi(getenv("COLUMNS"));
+    char *columns = getenv("COLUMNS");
+    int result = columns ? atoi(columns) : 80;
 
     if (!result) {
         result = (unsigned int)-1;
