@@ -162,6 +162,12 @@ arguments_get_line(const char *s, unsigned int *length,
         }
     }
 
+    /* If result is less than length, we have stopped before reaching a new
+       word */
+    if (result < *length) {
+        result = *length;
+    }
+
     /* Skip any trailing space so that the next offset will be the start of a
        word or the end of the string */
     while ((result < end) && (s[result] == ' ')) result++;
