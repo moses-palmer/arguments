@@ -374,7 +374,7 @@ arguments_read(int argc, char *argv[], int *nextarg)
             arguments.name.present = 1; \
             arguments.name.value_strings_length = value_count; \
             \
-            if (*nextarg + arguments.name.value_strings_length < argc) { \
+            if (*nextarg + (int)arguments.name.value_strings_length < argc) { \
                 (*nextarg)++; \
                 arguments.name.value_strings = argv + *nextarg; \
                 *nextarg += arguments.name.value_strings_length; \
