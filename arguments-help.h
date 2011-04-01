@@ -235,7 +235,7 @@ arguments_print_help(void)
 {
     unsigned int terminal_width;
     int header_width;
-    char header[128];
+    char header[128], *h;
 
     /* Determine the width of the termihnal */
     terminal_width = arguments_terminal_width();
@@ -258,6 +258,11 @@ arguments_print_help(void)
     } \
     else { \
         snprintf(header, sizeof(header), "--%s", #name); \
+    } \
+    for (h = header; *h; h++) { \
+        if (*h == '_') { \
+            *h = '-'; \
+        } \
     } \
     arguments_print_help_string(header, help, header_width, terminal_width);
 #include "../arguments.def"
