@@ -207,7 +207,12 @@ arguments_print_help_string(const char *header, const char *help,
 
         /* Print at most length charaters from the current offset in the help
            string */
-        printf("%-.*s\n", length, c);
+        printf("%-.*s", length, c);
+
+        /* Do not print newline when the string covers the entire line */
+        if (length < terminal_width - header_width - 1) {
+            printf("\n");
+        }
         c += n;
 
         /* If we have not reached the end of the help string, print a new empty
