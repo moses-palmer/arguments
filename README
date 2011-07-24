@@ -8,7 +8,7 @@ line argument, and whether they were passed on the command line is available
 by invoking ARGUMENT_IS_PRESENT(name).
 
 The command line arguments must be defined in the separate file
-arguments.def. This file contains invocations of the macro _A and,
+arguments.def. This file contains invocations of the macro ARGUMENT and,
 optionally, functions and includes to initialise argument variables.
 
 
@@ -24,11 +24,11 @@ The typical structure of arguments.def will be as follows:
 
 #endif
 
-_A(...)
+ARGUMENT(...)
 
 /* ... */
 
-_A(...)
+ARGUMENT(...)
 
 /* End of file */
 
@@ -36,8 +36,8 @@ The order of the arguments found in arguments.def needs to reflect the
 parameters to the main function if ARGUMENTS_AUTOMATIC is defined.
 
 
-2. The _A macro
-===============
+2. The ARGUMENT macro
+=====================
 
 The argument defining macro takes the following parameters:
 

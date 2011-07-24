@@ -34,8 +34,8 @@ argument_header_width(void)
     result = 0;
 
     /* Calculate how many characters we need for the argument names */
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, value_count, is_required, help, \
         set_default, read, release) \
     current = 2 + strlen(#name); \
     if (short) { \
@@ -249,8 +249,8 @@ arguments_print_help(void)
 #endif
 
     /* Print the argument help strings */
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     if (short) { \
         snprintf(header, sizeof(header), "--%s, %s", #name, \

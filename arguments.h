@@ -55,7 +55,7 @@
  *     variables are available to the code:
  *       - type *target: a pointer to the variable that received the value.
  */
-#define _A(type, name, short, value_count, is_required, help, \
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
     set_default, read, release)
 
 /**
@@ -64,12 +64,13 @@
 #define ARGUMENT_NO_SHORT_OPTION NULL
 
 /**
- * Pass this value as is_required to the _A macro if the argument is required.
+ * Pass this value as is_required to the ARGUMENT macro if the argument is
+ * required.
  */
 #define ARGUMENT_IS_REQUIRED 1
 
 /**
- * Pass this value as is_required to the _A macro if the argument is not
+ * Pass this value as is_required to the ARGUMENT macro if the argument is not
  * required.
  */
 #define ARGUMENT_IS_OPTIONAL 0
@@ -90,8 +91,8 @@
  * We include arguments.def to define anything in the ARGUMENTS_HELPERS section
  * and the types of the arguments.
  */
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     typedef type name##_t;
 #include "../arguments.def"
@@ -170,8 +171,8 @@ arguments_setup(int argc, char *argv[])
  *     arguments.def.
  * @return the application return code
  */
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     , name##_t name
 static int
@@ -265,8 +266,8 @@ arguments_cmp(const char *longarg, const char *name)
  *   * value: its value after it has been parsed
  */
 static struct {
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     struct { \
         int present; \
@@ -306,8 +307,8 @@ arguments_initialize(void)
 static void
 arguments_release(void)
 {
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     if (arguments.name.initialized) { \
         name##_t *target = &arguments.name.value; \
@@ -377,8 +378,8 @@ arguments_read(int argc, char *argv[], int *nextarg)
         if (0);
 #endif
 
-    #undef _A
-    #define _A(type, name, short, value_count, is_required, help, \
+    #undef ARGUMENT
+    #define ARGUMENT(type, name, short, help, value_count, is_required, \
             set_default, read, release) \
         else if ((arguments_cmp(argv[*nextarg], #name) == 0) \
                 || (strcmp(argv[*nextarg], short ? short : "") == 0)) { \
@@ -422,8 +423,8 @@ arguments_set(void)
 {
     int is_valid = 1;
 
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     if (is_valid) { \
         name##_t *target = &arguments.name.value; \
@@ -493,8 +494,8 @@ main(int argc, char *argv[])
     #define print_missing(name)
 #endif
 
-#undef _A
-#define _A(type, name, short, value_count, is_required, help, \
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     if ((is_required) && !arguments.name.present) { \
         print_missing(#name); \
@@ -525,8 +526,8 @@ main(int argc, char *argv[])
     }
 
     return run(argc, argv
-        #undef _A
-        #define _A(type, name, short, value_count, is_required, help, \
+        #undef ARGUMENT
+        #define ARGUMENT(type, name, short, help, value_count, is_required, \
                 set_default, read, release) \
             , arguments.name.value
         #include "../arguments.def"
