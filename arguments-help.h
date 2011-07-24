@@ -180,6 +180,8 @@ arguments_get_line(const char *s, unsigned int *length,
  *
  * @param header
  *     The argument header. This should be "--long-name" or "--long-name, -s".
+ *     This parameter is optional and may be NULL if only the help should be
+ *     printed. In that case, header_width is set to 0.
  * @param help
  *     The help string.
  * @param header_width
@@ -195,7 +197,12 @@ arguments_print_help_string(const char *header, const char *help,
 
     /* Print the header, which is the argument names left aligned and padded up
        to names_width characters */
-    printf("\n%-*s ", header_width, header);
+    if (header) {
+        printf("\n%-*s ", header_width, header);
+    }
+    else {
+        header_width = 0;
+    }
 
     c = help;
     while (*c) {
@@ -203,21 +210,22 @@ arguments_print_help_string(const char *header, const char *help,
 
         /* Get the length of the current line, and the offset of the start of
            the next line */
-        n = arguments_get_line(c, &length, terminal_width - header_width);
+        n = arguments_get_line(c, &length, terminal_width - header_width
+            + (header ? 0 : 1));
 
         /* Print at most length charaters from the current offset in the help
            string */
         printf("%-.*s", length, c);
 
         /* Do not print newline when the string covers the entire line */
-        if (length < terminal_width - header_width - 1) {
+        if (length < terminal_width - header_width - (header ? 1 : 0)) {
             printf("\n");
         }
         c += n;
 
         /* If we have not reached the end of the help string, print a new empty
-           header column */
-        if (*c) {
+           header column; do not do this if no header has been specified */
+        if (*c && header) {
             unsigned int i;
 
             for (i = 0; i <= header_width; i++) {
@@ -245,7 +253,7 @@ arguments_print_help(void)
 
 #ifdef ARGUMENTS_HELP
     /* Print the help header */
-    printf("%s\n", ARGUMENTS_HELP);
+    arguments_print_help_string(NULL, ARGUMENTS_HELP, 0, terminal_width);
 #endif
 
     /* Print the argument help strings */
