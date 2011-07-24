@@ -21,6 +21,10 @@
  * @param short
  *     The short command line argument name. This may be NULL.
  *
+ * @param help
+ *     The help text for the argument. The first occurrence of "%s" in this
+ *     message will be replaced by the default value.
+ *
  * @param value_count
  *     The number of parameters following the named parameter that are required.
  *
@@ -28,10 +32,6 @@
  *     Whether this argument is required on the command line. The value for
  *     is_required is evaluated once all arguments have been read, so it may
  *     depend on arguments passed on the command line.
- *
- * @param help
- *     The help text for the argument. The first occurrence of "%s" in this
- *     message will be replaced by the default value.
  *
  * @param set_default
  *     A list of statements executed when the argument has not been passed on
@@ -44,7 +44,8 @@
  *     A list of statements used to actually set the value of the variable. The
  *     following variables are available to the code:
  *       - type *target: a pointer to the variable to receive the value.
- *       - const char *value: the actual value passed.
+ *       - const char **value_strings: the actual values passed.
+ *       - int value_strings_length: the number of values passed.
  *       - int is_valid: whether the value passed was valid; set this to 0 if
  *         the argument variable could not be initialised.
  *
@@ -156,11 +157,18 @@ arguments_setup(int argc, char *argv[])
 #endif
 
 /**
- * This is the function called by main.c once the arguments have been parsed if
+ * This is the function called by main once the arguments have been parsed if
  * ARGUMENTS_AUTOMATIC is non-zero.
  *
  * Its function signature matches that of main with all arguments found in
  * arguments.def added to the argument list as well.
+ *
+ * @param argc, argv
+ *     The parameters passed to main.
+ * @param others
+ *     The parsed command line arguments in the order they are defined in
+ *     arguments.def.
+ * @return the application return code
  */
 #undef _A
 #define _A(type, name, short, value_count, is_required, help, \
