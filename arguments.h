@@ -138,9 +138,13 @@
  * the argument readers.
  *
  * If this function does not return 0, the program is terminated with the exit
- * code reurned by this function.
+ * code returned by this function.
  *
  * If you do not need any setup, define ARGUMENTS_NO_SETUP.
+ *
+ * @param argc, argv
+ *     The parameters passed to main.
+ * @return 0 upon success and the application return code otherwise
  */
 static int
 arguments_setup(int argc, char *argv[])
