@@ -24,9 +24,13 @@ The typical structure of arguments.def will be as follows:
 
 #endif
 
+ARGUMENT_SECTION(...)
+
 ARGUMENT(...)
 
 /* ... */
+
+ARGUMENT_SECTION(...)
 
 ARGUMENT(...)
 
@@ -92,7 +96,22 @@ release
     variables are available to the code:
       - type *target: a pointer to the variable that received the value.
 
-3. Defines recognised
+
+3. The ARGUMENT_SECTION macro
+=============================
+
+Arguments may be grouped into sections with the ARGUMENT_SECTION macro. It takes
+the following parameters:
+
+text
+    The text to display before the arguments of this section are listed when the
+    help is invoked.
+
+This macro is used only as a convenient way to insert section text into the help
+text.
+
+
+4. Defines recognised
 =====================
 
 The following is a list of defines that are recognised by arguments.h. They

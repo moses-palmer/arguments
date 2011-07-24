@@ -44,6 +44,8 @@ argument_header_width(void)
     if (current > result) { \
         result = current; \
     }
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
 #include "../arguments.def"
 
     return result;
@@ -273,5 +275,9 @@ arguments_print_help(void)
         } \
     } \
     arguments_print_help_string(header, help, header_width, terminal_width);
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text) \
+    printf("\n"); \
+    arguments_print_help_string(NULL, text, 0, terminal_width);
 #include "../arguments.def"
 }

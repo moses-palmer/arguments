@@ -59,6 +59,17 @@
     set_default, read, release)
 
 /**
+ * This is the macro used to separate command line parameters into natural
+ * sections. Use this macro to group arguments.
+ *
+ * The group is only used when printing the help text.
+ *
+ * @param text
+ *     The text to insert before the section is displayed.
+ */
+#define ARGUMENT_SECTION(text)
+
+/**
  * Pass this value as short if the argument does not have a short name.
  */
 #define ARGUMENT_NO_SHORT_OPTION NULL
@@ -95,6 +106,8 @@
 #define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     typedef type name##_t;
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
 #include "../arguments.def"
 
 /**
@@ -175,6 +188,8 @@ arguments_setup(int argc, char *argv[])
 #define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     , name##_t name
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
 static int
 run(int argc, char *argv[]
     #include "../arguments.def"
@@ -276,6 +291,8 @@ static struct {
         unsigned int value_strings_length; \
         name##_t value; \
     } name;
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
 #include "../arguments.def"
 } arguments;
 
@@ -319,6 +336,8 @@ arguments_release(void)
         \
         if (target); \
     }
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
 #include "../arguments.def"
 }
 
@@ -396,6 +415,8 @@ arguments_read(int argc, char *argv[], int *nextarg)
                 break; \
             } \
         }
+    #undef ARGUMENT_SECTION
+    #define ARGUMENT_SECTION(text)
     #include "../arguments.def"
 
         else {
@@ -448,6 +469,8 @@ arguments_set(void)
         if (value_strings); \
         if (value_strings_length); \
     }
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
 #include "../arguments.def"
 
     /* This function has to be called */
@@ -501,6 +524,8 @@ main(int argc, char *argv[])
         print_missing(#name); \
         return ARGUMENTS_PARAMETER_MISSING; \
     }
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
 #include "../arguments.def"
 
     /* Call setup before converting the parameter values to variables */
@@ -530,6 +555,8 @@ main(int argc, char *argv[])
         #define ARGUMENT(type, name, short, help, value_count, is_required, \
                 set_default, read, release) \
             , arguments.name.value
+        #undef ARGUMENT_SECTION
+        #define ARGUMENT_SECTION(text)
         #include "../arguments.def"
     );
 }
