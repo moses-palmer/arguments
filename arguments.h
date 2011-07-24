@@ -281,7 +281,7 @@ arguments_initialize(void)
 }
 
 
-#if ARGUMENTS_PRINT_HELP || ARGUMENTS_AUTOMATIC
+#if ARGUMENTS_PRINT_HELP
     #include "arguments-help.h"
 #endif
 
