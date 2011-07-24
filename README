@@ -118,6 +118,14 @@ The following is a list of defines that are recognised by arguments.h. They
 should be defined before arguments.h is included. Their default values are
 included.
 
+ARGUMENTS_READ_ONLY
+    If this is defined, arguments.h will only export the helper macros and the
+    extern symbol struct arguments_t arguments, which is the struct containing
+    the parsed argument values.
+
+    The purpose of this define is to allow other source files to access the
+    argument values.
+
 ARGUMENTS_AUTOMATIC=1
     Whether to enter automatic mode.
 

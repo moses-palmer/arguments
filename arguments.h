@@ -141,6 +141,37 @@
     #define ARGUMENTS_PARAMETER_MISSING 120
 #endif
 
+/**
+ * The type of the struct that contains all argument values.
+ *
+ * For every argument, a single struct is created containing
+ *   * present: whether this argument was present on the command line
+ *   * initialized: whether this argument has been initialised
+ *   * value_strings: the value passed for the argument on the command line, if
+ *     any
+ *   * value_strings_length: the number of string values in value_strings
+ *   * value: its value after it has been parsed
+ */
+struct arguments_t {
+#undef ARGUMENT
+#define ARGUMENT(type, name, short, help, value_count, is_required, \
+        set_default, read, release) \
+    struct { \
+        int present; \
+        int initialized; \
+        char **value_strings; \
+        unsigned int value_strings_length; \
+        name##_t value; \
+    } name;
+#undef ARGUMENT_SECTION
+#define ARGUMENT_SECTION(text)
+#include "../arguments.def"
+};
+
+#ifdef ARGUMENTS_READ_ONLY
+extern struct arguments_t arguments;
+#else
+struct arguments_t arguments;
 
 #if ARGUMENTS_AUTOMATIC
 
@@ -267,34 +298,6 @@ arguments_cmp(const char *longarg, const char *name)
 
     return *longarg - (*name == '_') ? '-' : *name;
 }
-
-
-/**
- * The struct that contains all argument values.
- *
- * For every argument, a single struct is created containing
- *   * present: whether this argument was present on the command line
- *   * initialized: whether this argument has been initialised
- *   * value_strings: the value passed for the argument on the command line, if
- *     any
- *   * value_strings_length: the number of string values in value_strings
- *   * value: its value after it has been parsed
- */
-static struct {
-#undef ARGUMENT
-#define ARGUMENT(type, name, short, help, value_count, is_required, \
-        set_default, read, release) \
-    struct { \
-        int present; \
-        int initialized; \
-        char **value_strings; \
-        unsigned int value_strings_length; \
-        name##_t value; \
-    } name;
-#undef ARGUMENT_SECTION
-#define ARGUMENT_SECTION(text)
-#include "../arguments.def"
-} arguments;
 
 
 /**
@@ -563,6 +566,8 @@ main(int argc, char *argv[])
 
 
 #define main run
+
+#endif
 
 #endif
 
