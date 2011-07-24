@@ -8,8 +8,7 @@
  * arguments.def and populate it with invocations of this macro.
  *
  * The order of the arguments found in arguments.def needs to reflect the
- * parameters to to the start function in start.c if ARGUMENTS_AUTOMATIC is
- * defined.
+ * parameters to to the run function if ARGUMENTS_AUTOMATIC is defined.
  *
  * @param type
  *     The type of the variable that stores the parsed value of this argument.
@@ -450,7 +449,7 @@ arguments_set(void)
 
 
 /*
- * If ARGUMENTS_AUTOMATIC is non-zero, we implement main() and call start()
+ * If ARGUMENTS_AUTOMATIC is non-zero, we implement main() and call run()
  * instead.
  */
 #if ARGUMENTS_AUTOMATIC
