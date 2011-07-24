@@ -139,6 +139,11 @@ ARGUMENTS_NO_TEARDOWN
     called. If arguments_setup exited successfully, this function will always be
     called as static void arguments_teardown(void) using the atexit function.
 
+ARGUMENTS_HELP
+    The generic help string for the application. This is printed before the
+    command line argument help strings when the application is invoked with
+    --help and ARGUMENTS_AUTOMATIC is 1.
+
 4. Manual mode
 ==============
 
