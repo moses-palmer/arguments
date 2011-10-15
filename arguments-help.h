@@ -74,7 +74,7 @@ arguments_get_line(const char *s, unsigned int *length,
 {
     mbstate_t mbs;
     int was_space, seen_space;
-    unsigned int word_count, end, l, i, result;
+    unsigned int end, l, i, result;
 
     /* Initialise the multibyte state */
     memset(&mbs, 0, sizeof(mbs));
@@ -88,7 +88,6 @@ arguments_get_line(const char *s, unsigned int *length,
     *length = 0;
     was_space = 0;
     seen_space = 0;
-    word_count = 0;
     end = strlen(s);
     l = 0;
     i = 0;
