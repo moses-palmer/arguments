@@ -497,6 +497,29 @@ main(int argc, char *argv[])
 
     arguments_initialize();
 
+#if defined(WIN32)
+    if (1) {
+        wchar_t **wargv;
+        int targc;
+
+        wargv = CommandLineToArgvW(GetCommandLine(), &targc);
+        if (wargv && targc == argc) {
+            int i;
+
+            for (i = 0; i < targc; i++) {
+                size_t size = WideCharToMultiByte(CP_UTF8, 0, wargv[i], -1,
+                    NULL, 0, NULL, NULL);
+                char *arg = alloca(size);
+
+                WideCharToMultiByte(CP_UTF8, 0, wargv[i], -1, arg, size,
+                    NULL, NULL);
+                argv[i] = arg;
+            }
+        }
+        LocalFree(wargv);
+    }
+#endif
+
     /* First parse the arguments */
     switch (arguments_read(argc, argv, &nextarg)) {
     case AC_OK:
