@@ -262,8 +262,7 @@ arguments_print_help(void)
 #define ARGUMENT(type, name, short, help, value_count, is_required, \
         set_default, read, release) \
     if (short) { \
-        snprintf(header, sizeof(header), "--%s, %s", #name, \
-            short ? short : ""); \
+        snprintf(header, sizeof(header), "--%s, %s", #name, short); \
     } \
     else { \
         snprintf(header, sizeof(header), "--%s", #name); \
