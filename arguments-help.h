@@ -246,7 +246,7 @@ arguments_print_help(void)
     int header_width;
     char header[128], *h;
 
-    /* Determine the width of the termihnal */
+    /* Determine the width of the terminal */
     terminal_width = arguments_terminal_width();
 
     /* Determine how many columns we need for the argument names */
