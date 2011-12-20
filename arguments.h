@@ -19,7 +19,8 @@
  *     then replacing all underscores with dashes.
  *
  * @param short
- *     The short command line argument name. This may be NULL.
+ *     The short command line argument name. This may not be NULL; use
+ *     ARGUMENT_NO_SHORT_OPTION if the argument hs no short option.
  *
  * @param help
  *     The help text for the argument. The first occurrence of "%s" in this
@@ -72,7 +73,7 @@
 /**
  * Pass this value as short if the argument does not have a short name.
  */
-#define ARGUMENT_NO_SHORT_OPTION NULL
+#define ARGUMENT_NO_SHORT_OPTION ""
 
 /**
  * Pass this value as is_required to the ARGUMENT macro if the argument is
