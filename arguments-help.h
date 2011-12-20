@@ -211,7 +211,7 @@ arguments_print_help_string(const char *header, const char *help,
 
         /* Get the length of the current line, and the offset of the start of
            the next line */
-        n = arguments_get_line(c, &length, terminal_width - header_width);
+        n = arguments_get_line(c, &length, terminal_width - header_width - 1);
 
         /* Print at most length charaters from the current offset in the help
            string */
