@@ -297,7 +297,7 @@ arguments_cmp(const char *longarg, const char *name)
         name++;
     }
 
-    return *longarg - (*name == '_') ? '-' : *name;
+    return *longarg - ((*name == '_') ? '-' : *name);
 }
 
 
