@@ -503,7 +503,7 @@ main(int argc, char *argv[])
         wchar_t **wargv;
         int targc;
 
-        wargv = CommandLineToArgvW(GetCommandLine(), &targc);
+        wargv = CommandLineToArgvW(GetCommandLineW(), &targc);
         if (wargv && targc == argc) {
             int i;
 
