@@ -490,27 +490,38 @@ arguments_set(void)
  */
 #if ARGUMENTS_AUTOMATIC
 
+#if !defined(WIN32) || defined(_CONSOLE)
 int
 main(int argc, char *argv[])
 {
+#else
+int APIENTRY
+wWinMain(HINSTANCE instance, HINSTANCE prev, LPTSTR targs, int show)
+{
+    int argc;
+    char **argv;
+#endif
     int result;
     int nextarg = 1;
 
     arguments_initialize();
 
 #if defined(WIN32)
+    /* On Windows, we need to create out own arguments from the wide character
+       arguments to maintain the character encoding */
     if (1) {
         wchar_t **wargv;
-        int targc;
 
-        wargv = CommandLineToArgvW(GetCommandLineW(), &targc);
-        if (wargv && targc == argc) {
+        wargv = CommandLineToArgvW(GetCommandLine(), &argc);
+        argv = NULL;
+        if (wargv) {
             int i;
 
-            for (i = 0; i < targc; i++) {
+            argv = (char**)alloca(argc * sizeof(argv[0]));
+            for (i = 0; i < argc; i++) {
                 size_t size = WideCharToMultiByte(CP_UTF8, 0, wargv[i], -1,
                     NULL, 0, NULL, NULL);
-                char *arg = alloca(size);
+                char *arg = (char*)alloca(size);
 
                 WideCharToMultiByte(CP_UTF8, 0, wargv[i], -1, arg, size,
                     NULL, NULL);
